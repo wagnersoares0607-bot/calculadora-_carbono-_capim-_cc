@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#14532d">
+<title>Calculadora Simples CC</title>
+<style>
+*{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;background:#eef2ee;font-family:Arial,sans-serif;color:#17231a;padding:16px}
+.app{width:min(100%,360px);background:#fff;border-radius:22px;padding:20px;box-shadow:0 8px 28px #0002}
+h1{font-size:20px;margin:0 0 5px;color:#14532d}.sub{font-size:12px;color:#66736a;margin-bottom:18px}
+#display{width:100%;height:72px;border:0;border-radius:12px;background:#f1f5f1;text-align:right;padding:12px;font-size:32px;color:#142018;margin-bottom:12px}
+.keys{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
+button{height:58px;border:0;border-radius:13px;background:#e8eee9;font-size:21px;font-weight:600;color:#18251c}
+button.op{background:#d8eadb;color:#14532d}button.equal{background:#166534;color:white}button.clear{background:#fee2e2;color:#991b1b}
+small{display:block;text-align:center;color:#718075;margin-top:16px}
+</style>
+</head>
+<body><main class="app">
+<h1>Calculadora Simples CC</h1><div class="sub">Carbono Capim · operações básicas</div>
+<input id="display" value="0" readonly aria-label="Visor">
+<div class="keys">
+<button class="clear" onclick="clearAll()">C</button><button onclick="del()">⌫</button><button class="op" onclick="percent()">%</button><button class="op" onclick="operator('/')">÷</button>
+<button onclick="digit('7')">7</button><button onclick="digit('8')">8</button><button onclick="digit('9')">9</button><button class="op" onclick="operator('*')">×</button>
+<button onclick="digit('4')">4</button><button onclick="digit('5')">5</button><button onclick="digit('6')">6</button><button class="op" onclick="operator('-')">−</button>
+<button onclick="digit('1')">1</button><button onclick="digit('2')">2</button><button onclick="digit('3')">3</button><button class="op" onclick="operator('+')">+</button>
+<button onclick="digit('0')">0</button><button onclick="digit('.')">,</button><button onclick="sign()">±</button><button class="equal" onclick="calculate()">=</button>
+</div><small>Funciona offline após abrir e pode ser usada no navegador.</small>
+</main>
+<script>
+const d=document.getElementById('display');let current='0',stored=null,op=null,reset=false;
+function show(){d.value=current.replace('.',',')}
+function digit(x){if(reset){current='0';reset=false}if(x==='.'&&current.includes('.'))return;if(current==='0'&&x!=='.')current=x;else current+=x;show()}
+function operator(o){if(op&&!reset)calculate();stored=Number(current);op=o;reset=true}
+function calculate(){if(op===null||stored===null)return;let b=Number(current),r=op==='+'?stored+b:op==='-'?stored-b:op==='*'?stored*b:stored/b;current=Number.isFinite(r)?String(Number(r.toPrecision(12))):'Erro';op=null;stored=null;reset=true;show()}
+function clearAll(){current='0';stored=null;op=null;reset=false;show()}
+function del(){current=current.length>1?current.slice(0,-1):'0';show()}
+function percent(){current=String(Number(current)/100);show()}
+function sign(){if(current!=='0')current=String(-Number(current));show()}
+</script></body></html>
